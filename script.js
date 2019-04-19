@@ -172,7 +172,6 @@ dataP.then(function(data){
         .attr("width",43)
         .attr("height",43)
         .attr("fill","#329c98")
-      console.log(d)
       d3.select("#d"+d.y+"-"+d.y)
         .select(".student")
         .attr("x",0)
