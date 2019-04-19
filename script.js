@@ -31,7 +31,7 @@ var drawEmpty = function(first, second){
      .style("font-size","12px")
 }
 //////////////////////////////////////
-var drawColor=function(data,first,second)
+var correlation=function(data,first,second)
 {
   var quizData = [];
   var addData = function(data) {
@@ -42,7 +42,21 @@ var drawColor=function(data,first,second)
     }
   }
   addData(data);
-
+  var mx=d3.mean(quizData, function(d){return d.x;})
+  var my=d3.mean(quizData,function(d){return d.y;})
+  var top=quizData.map(function(d,i)
+  {
+    return (quizData[i].x-mx)*(quizData[i].y-my);
+  })
+  var topSum=d3.sum(top);
+  var sx=d3.deviation(quizData,function(d){return d.x});
+  var sy=d3.deviation(quizData,function(d){return d.y});
+  var r=(1/(quizData.length-1))*(topSum/(sx*sy))
+  return r;
+}
+///////////////////////////////////////
+var drawColor=function(r,first,second)
+{
   var width = 50;
   var height = 50;
   var svg = d3.select("body")
@@ -51,17 +65,6 @@ var drawColor=function(data,first,second)
               .attr("id","d"+first+"-"+second)
               .attr("width", width)
               .attr("height", height)
-
-var mx=d3.mean(quizData, function(d){return d.x;})
-var my=d3.mean(quizData,function(d){return d.y;})
-var top=quizData.map(function(d,i)
-{
-  return (quizData[i].x-mx)*(quizData[i].y-my);
-})
-var topSum=d3.sum(top);
-var sx=d3.deviation(quizData,function(d){return d.x});
-var sy=d3.deviation(quizData,function(d){return d.y});
-var r=(1/(quizData.length-1))*(topSum/sx*sy)
 if(Math.abs(r)<=0.3)
 {
   svg.append("rect")
@@ -134,7 +137,7 @@ dataP.then(function(data) {
         drawEmpty(i, j);
       }
       else {
-        drawColor(data,i,j);
+        drawColor(correlation(data,i,j),i,j);
       }
     }
   }
@@ -142,6 +145,7 @@ dataP.then(function(data) {
 function(err) {
   console.log(err);
 })
+
 var pair=[]
 for (var i = 0; i < 23; i++) {
   for (var j = 0; j <23; j++) {
