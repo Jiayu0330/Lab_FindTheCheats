@@ -16,19 +16,26 @@ d3.select("body")
   .attr("id", function(d) {return d;})
 /////////////////////////////////
 var drawEmpty = function(first, second){
-  var width = 50;
-  var height = 50;
+  var width = 43;
+  var height = 43;
   var svg = d3.select("body")
               .select("#d" + first.toString())
               .append("svg")
               .attr("id", "d"+first + "-" + second)
               .attr("width", width)
               .attr("height", height)
+  svg.append("rect")
+     .classed("student",true)
+     .attr("x",0)
+     .attr("y",0)
+     .attr("width",43)
+     .attr("height",43)
+     .attr("fill","none")
   svg.append("text")
      .attr("x",0)
-     .attr("y",30)
-     .text("student "+first)
-     .style("font-size","12px")
+     .attr("y",25)
+     .text("student"+first)
+     .style("font-size","10px")
 }
 //////////////////////////////////////
 var correlation=function(data,first,second)
@@ -57,8 +64,8 @@ var correlation=function(data,first,second)
 ///////////////////////////////////////
 var drawColor=function(r,first,second)
 {
-  var width = 50;
-  var height = 50;
+  var width = 43;
+  var height = 43;
   var svg = d3.select("body")
               .select("#d" + first.toString())
               .append("svg")
@@ -105,8 +112,8 @@ var drawSVG = function(data, first, second) {
   }
   addData(data);
 
-  var width = 50;
-  var height = 50;
+  var width = 43;
+  var height = 43;
 
   var svg = d3.select("#d"+first+"-"+second)
   var xScale = d3.scaleLinear()
@@ -124,7 +131,7 @@ var drawSVG = function(data, first, second) {
      .append("circle")
      .attr("cx", function(d) {return xScale(d.x);})
      .attr("cy", function(d) {return yScale(d.y);})
-     .attr("r", 1.5)
+     .attr("r", 1.3)
      .attr("fill","#f8f5fd")
      .style("pointer-events","none")
 
@@ -157,9 +164,51 @@ dataP.then(function(data){
     .data(pair)
     .on("mouseover",function(d){
       if(d.x!=d.y)
-      {drawSVG(data,d.x,d.y)}
+      {drawSVG(data,d.x,d.y)
+      d3.select("#d"+d.x+"-"+d.x)
+        .select(".student")
+        .attr("x",0)
+        .attr("y",0)
+        .attr("width",43)
+        .attr("height",43)
+        .attr("fill","#329c98")
+      console.log(d)
+      d3.select("#d"+d.y+"-"+d.y)
+        .select(".student")
+        .attr("x",0)
+        .attr("y",0)
+        .attr("width",43)
+        .attr("height",43)
+        .attr("fill","#329c98")}
     })
     .on("mouseout",function(){
       d3.selectAll("g").remove()
+      d3.selectAll(".student")
+        .attr("fill","none")
     })
 },function(err){console.log(err)})
+var color=[{color:"#ce94dc",text:"0<=r<0.3 or -0.3<r<=0"},{color:"#7477bc",text:"0.3<=r<0.6 or -0.6<r<=-0.3"},{color:"#3d314e",text:"0.6<=r<=1 or -1<=r<=-0.6 "}]
+var svg=d3.select("body")
+          .append("svg")
+          .attr("width",200)
+          .attr("height",300)
+          .attr("id","legend")
+
+svg.selectAll("rect")
+   .data(color)
+   .enter()
+   .append("rect")
+   .attr("x",20)
+   .attr("y",function(d,i){
+     return 20+i*40
+   })
+   .attr("width",30)
+   .attr("height",15)
+   .attr("fill",function(d){return d.color})
+svg.selectAll("text")
+   .data(color)
+   .enter()
+   .append("text")
+   .attr("x",20)
+   .attr("y",function(d,i){return 50+i*40})
+   .text(function(d){return d.text})

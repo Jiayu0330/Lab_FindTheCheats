@@ -1,4 +1,15 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans');
 svg{
   border: 1px black solid;
   margin-left: 2px;
+}
+#legend{
+  border:none;
+  position: absolute;
+  right:5px;
+  top:60px;
+}
+body
+{
+  font-family: 'PT Sans', sans-serif;
 }
