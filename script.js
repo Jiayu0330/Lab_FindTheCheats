@@ -80,6 +80,11 @@ if(Math.abs(r)<=0.3)
      .attr("width",width)
      .attr("height",height)
      .attr("fill","#ce94dc")
+     .on("mouseover", function() {
+       d3.select(this)
+         .append("title")
+         .text("r=" + r.toFixed(2));
+     })
 }
 else if(Math.abs(r)<=0.6)
 {
@@ -89,6 +94,11 @@ else if(Math.abs(r)<=0.6)
      .attr("width",width)
      .attr("height",height)
      .attr("fill","#7477bc")
+     .on("mouseover", function() {
+       d3.select(this)
+         .append("title")
+         .text("r=" + r.toFixed(2));
+     })
 }
 else
 {
@@ -98,6 +108,11 @@ else
      .attr("width",width)
      .attr("height",height)
      .attr("fill","#3d314e")
+     .on("mouseover", function() {
+       d3.select(this)
+         .append("title")
+         .text("r=" + r.toFixed(2));
+     })
 }
 }
 //////////////////////////////////////////////
